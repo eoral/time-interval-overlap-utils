@@ -3,7 +3,7 @@ package com.eoral.timeintervaloverlaputils;
 import java.time.Instant;
 import java.util.Objects;
 
-public class Interval {
+public class TimeInterval {
 	
 	private final Instant start;
 	private final Instant end;
@@ -12,7 +12,7 @@ public class Interval {
 	 * @param start	 the start instant, inclusive, not null
 	 * @param end  the end instant, exclusive, not null
 	 */
-	public Interval(Instant start, Instant end) {
+	public TimeInterval(Instant start, Instant end) {
 		Objects.requireNonNull(start, "Start cannot be null.");
 		Objects.requireNonNull(end, "End cannot be null.");
 		if (start.isAfter(end)) {
@@ -26,7 +26,7 @@ public class Interval {
 	 * @param start	 the start instant as string ('2011-12-03T10:15:30Z'), inclusive, not null
 	 * @param end  the end instant as string ('2011-12-03T10:15:30Z'), exclusive, not null
 	 */
-	public Interval(String start, String end) {
+	public TimeInterval(String start, String end) {
 		this(Instant.parse(start), Instant.parse(end));
 	}
 
