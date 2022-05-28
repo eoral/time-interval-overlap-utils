@@ -9,8 +9,8 @@ public class TimeInterval {
 	private final Instant end;
 	
 	/**
-	 * @param start	 the start instant, inclusive, not null
-	 * @param end  the end instant, exclusive, not null
+	 * @param start	not null and inclusive
+	 * @param end	not null and exclusive
 	 */
 	public TimeInterval(Instant start, Instant end) {
 		Objects.requireNonNull(start, "Start cannot be null.");
@@ -23,8 +23,8 @@ public class TimeInterval {
 	}
 	
 	/**
-	 * @param start	 the start instant as string ('2011-12-03T10:15:30Z'), inclusive, not null
-	 * @param end  the end instant as string ('2011-12-03T10:15:30Z'), exclusive, not null
+	 * @param start	a string that can be parsed to java.time.Instant (such as '2011-12-03T10:15:30Z'), (not null and inclusive)
+	 * @param end	a string that can be parsed to java.time.Instant (such as '2011-12-03T10:15:30Z'), (not null and exclusive)
 	 */
 	public TimeInterval(String start, String end) {
 		this(Instant.parse(start), Instant.parse(end));

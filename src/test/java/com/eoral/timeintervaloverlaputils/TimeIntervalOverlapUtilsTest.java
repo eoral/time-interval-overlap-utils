@@ -10,7 +10,23 @@ import org.junit.Test;
 
 public class TimeIntervalOverlapUtilsTest {
 	
-	// Beginning of all conditions where interval-2 ends after interval-1 ends
+	@Test(expected = NullPointerException.class)
+	public void getOverlapShouldThrowExceptionWhenInterval1IsNull() {
+		TimeInterval interval1 = null;
+		TimeInterval interval2 = new TimeInterval("2022-04-17T07:30:00Z", "2022-04-17T08:30:00Z");
+		TimeIntervalOverlapUtils.getOverlap(interval1, interval2);
+	}
+	
+	@Test(expected = NullPointerException.class)
+	public void getOverlapShouldThrowExceptionWhenInterval2IsNull() {
+		TimeInterval interval1 = new TimeInterval("2022-04-17T06:00:00Z", "2022-04-17T07:00:00Z");
+		TimeInterval interval2 = null;
+		TimeIntervalOverlapUtils.getOverlap(interval1, interval2);
+	}
+	
+	// According to Allen's interval algebra, there are 13 relations between two intervals.
+	// Below tests cover all 13 relations.
+
 	
 	/**
 	 * <pre>
@@ -24,7 +40,6 @@ public class TimeIntervalOverlapUtilsTest {
 		TimeInterval interval2 = new TimeInterval("2022-04-17T07:30:00Z", "2022-04-17T08:30:00Z");
 		Optional<TimeInterval> optionalOverlap = TimeIntervalOverlapUtils.getOverlap(interval1, interval2);
 		assertTrue(optionalOverlap.isEmpty());
-		// todo: reverse intervals
 	}
 	
 	/**
@@ -39,7 +54,6 @@ public class TimeIntervalOverlapUtilsTest {
 		TimeInterval interval2 = new TimeInterval("2022-04-17T07:00:00Z", "2022-04-17T08:30:00Z");
 		Optional<TimeInterval> optionalOverlap = TimeIntervalOverlapUtils.getOverlap(interval1, interval2);
 		assertTrue(optionalOverlap.isEmpty());
-		// todo: reverse intervals
 	}
 	
 	/**
@@ -49,14 +63,13 @@ public class TimeIntervalOverlapUtilsTest {
 	 * </pre>      
 	 */
 	@Test
-	public void getOverlapShouldReturnNonEmptyOptionalWhenInterval2StartsInTheMiddleOfInterval1AndInterval2EndsAfterInterval1Ends() {
+	public void getOverlapShouldReturnNonEmptyOptionalWhenInterval2StartsDuringInterval1AndInterval2EndsAfterInterval1Ends() {
 		TimeInterval interval1 = new TimeInterval("2022-04-17T06:00:00Z", "2022-04-17T07:00:00Z");
 		TimeInterval interval2 = new TimeInterval("2022-04-17T06:30:00Z", "2022-04-17T08:30:00Z");
 		Optional<TimeInterval> optionalOverlap = TimeIntervalOverlapUtils.getOverlap(interval1, interval2);
 		assertFalse(optionalOverlap.isEmpty());
 		assertEquals(optionalOverlap.get().getStart().toString(), "2022-04-17T06:30:00Z");
 		assertEquals(optionalOverlap.get().getEnd().toString(), "2022-04-17T07:00:00Z");
-		// todo: reverse intervals
 	}
 	
 	/**
@@ -73,7 +86,6 @@ public class TimeIntervalOverlapUtilsTest {
 		assertFalse(optionalOverlap.isEmpty());
 		assertEquals(optionalOverlap.get().getStart().toString(), "2022-04-17T06:00:00Z");
 		assertEquals(optionalOverlap.get().getEnd().toString(), "2022-04-17T07:00:00Z");
-		// todo: reverse intervals
 	}
 	
 	/**
@@ -90,10 +102,7 @@ public class TimeIntervalOverlapUtilsTest {
 		assertFalse(optionalOverlap.isEmpty());
 		assertEquals(optionalOverlap.get().getStart().toString(), "2022-04-17T06:00:00Z");
 		assertEquals(optionalOverlap.get().getEnd().toString(), "2022-04-17T07:00:00Z");
-		// todo: reverse intervals
 	}
-	
-	// Beginning of all conditions where interval-1 and interval-2 end at the same instant
 	
 	/**
 	 * <pre>
@@ -102,14 +111,13 @@ public class TimeIntervalOverlapUtilsTest {
 	 * </pre>      
 	 */
 	@Test
-	public void getOverlapShouldReturnNonEmptyOptionalWhenInterval2StartsInTheMiddleOfInterval1AndIntervalsEndAtTheSameInstant() {
+	public void getOverlapShouldReturnNonEmptyOptionalWhenInterval2StartsDuringInterval1AndIntervalsEndAtTheSameInstant() {
 		TimeInterval interval1 = new TimeInterval("2022-04-17T06:00:00Z", "2022-04-17T07:00:00Z");
 		TimeInterval interval2 = new TimeInterval("2022-04-17T06:30:00Z", "2022-04-17T07:00:00Z");
 		Optional<TimeInterval> optionalOverlap = TimeIntervalOverlapUtils.getOverlap(interval1, interval2);
 		assertFalse(optionalOverlap.isEmpty());
 		assertEquals(optionalOverlap.get().getStart().toString(), "2022-04-17T06:30:00Z");
 		assertEquals(optionalOverlap.get().getEnd().toString(), "2022-04-17T07:00:00Z");
-		// todo: reverse intervals
 	}
 	
 	/**
@@ -126,7 +134,6 @@ public class TimeIntervalOverlapUtilsTest {
 		assertFalse(optionalOverlap.isEmpty());
 		assertEquals(optionalOverlap.get().getStart().toString(), "2022-04-17T06:00:00Z");
 		assertEquals(optionalOverlap.get().getEnd().toString(), "2022-04-17T07:00:00Z");
-		// todo: reverse intervals
 	}
 	
 	/**
@@ -143,10 +150,7 @@ public class TimeIntervalOverlapUtilsTest {
 		assertFalse(optionalOverlap.isEmpty());
 		assertEquals(optionalOverlap.get().getStart().toString(), "2022-04-17T06:00:00Z");
 		assertEquals(optionalOverlap.get().getEnd().toString(), "2022-04-17T07:00:00Z");
-		// todo: reverse intervals
 	}
-	
-	// Beginning of all conditions where interval-2 ends in the middle of interval-1
 	
 	/**
 	 * <pre>
@@ -155,14 +159,13 @@ public class TimeIntervalOverlapUtilsTest {
 	 * </pre>      
 	 */
 	@Test
-	public void getOverlapShouldReturnNonEmptyOptionalWhenInterval2StartsInTheMiddleOfInterval1AndInterval2EndsInTheMiddleOfInterval1() {
+	public void getOverlapShouldReturnNonEmptyOptionalWhenInterval2StartsDuringInterval1AndInterval2EndsDuringInterval1() {
 		TimeInterval interval1 = new TimeInterval("2022-04-17T06:00:00Z", "2022-04-17T07:00:00Z");
 		TimeInterval interval2 = new TimeInterval("2022-04-17T06:15:00Z", "2022-04-17T06:45:00Z");
 		Optional<TimeInterval> optionalOverlap = TimeIntervalOverlapUtils.getOverlap(interval1, interval2);
 		assertFalse(optionalOverlap.isEmpty());
 		assertEquals(optionalOverlap.get().getStart().toString(), "2022-04-17T06:15:00Z");
 		assertEquals(optionalOverlap.get().getEnd().toString(), "2022-04-17T06:45:00Z");
-		// todo: reverse intervals
 	}
 	
 	/**
@@ -172,14 +175,13 @@ public class TimeIntervalOverlapUtilsTest {
 	 * </pre>      
 	 */
 	@Test
-	public void getOverlapShouldReturnNonEmptyOptionalWhenIntervalsStartAtTheSameInstantAndInterval2EndsInTheMiddleOfInterval1() {
+	public void getOverlapShouldReturnNonEmptyOptionalWhenIntervalsStartAtTheSameInstantAndInterval2EndsDuringInterval1() {
 		TimeInterval interval1 = new TimeInterval("2022-04-17T06:00:00Z", "2022-04-17T07:00:00Z");
 		TimeInterval interval2 = new TimeInterval("2022-04-17T06:00:00Z", "2022-04-17T06:45:00Z");
 		Optional<TimeInterval> optionalOverlap = TimeIntervalOverlapUtils.getOverlap(interval1, interval2);
 		assertFalse(optionalOverlap.isEmpty());
 		assertEquals(optionalOverlap.get().getStart().toString(), "2022-04-17T06:00:00Z");
 		assertEquals(optionalOverlap.get().getEnd().toString(), "2022-04-17T06:45:00Z");
-		// todo: reverse intervals
 	}
 	
 	/**
@@ -189,17 +191,14 @@ public class TimeIntervalOverlapUtilsTest {
 	 * </pre>      
 	 */
 	@Test
-	public void getOverlapShouldReturnNonEmptyOptionalWhenInterval2StartsBeforeInterval1StartsAndInterval2EndsInTheMiddleOfInterval1() {
+	public void getOverlapShouldReturnNonEmptyOptionalWhenInterval2StartsBeforeInterval1StartsAndInterval2EndsDuringInterval1() {
 		TimeInterval interval1 = new TimeInterval("2022-04-17T06:00:00Z", "2022-04-17T07:00:00Z");
 		TimeInterval interval2 = new TimeInterval("2022-04-17T05:30:00Z", "2022-04-17T06:45:00Z");
 		Optional<TimeInterval> optionalOverlap = TimeIntervalOverlapUtils.getOverlap(interval1, interval2);
 		assertFalse(optionalOverlap.isEmpty());
 		assertEquals(optionalOverlap.get().getStart().toString(), "2022-04-17T06:00:00Z");
 		assertEquals(optionalOverlap.get().getEnd().toString(), "2022-04-17T06:45:00Z");
-		// todo: reverse intervals
 	}
-	
-	// Beginning of all conditions where interval-2 ends at the same instant interval-1 starts
 	
 	/**
 	 * <pre>
@@ -213,10 +212,7 @@ public class TimeIntervalOverlapUtilsTest {
 		TimeInterval interval2 = new TimeInterval("2022-04-17T05:00:00Z", "2022-04-17T06:00:00Z");
 		Optional<TimeInterval> optionalOverlap = TimeIntervalOverlapUtils.getOverlap(interval1, interval2);
 		assertTrue(optionalOverlap.isEmpty());
-		// todo: reverse intervals
 	}
-	
-	// Beginning of all conditions where interval-2 ends before interval-1 starts
 	
 	/**
 	 * <pre>
@@ -230,6 +226,5 @@ public class TimeIntervalOverlapUtilsTest {
 		TimeInterval interval2 = new TimeInterval("2022-04-17T04:30:00Z", "2022-04-17T05:30:00Z");
 		Optional<TimeInterval> optionalOverlap = TimeIntervalOverlapUtils.getOverlap(interval1, interval2);
 		assertTrue(optionalOverlap.isEmpty());
-		// todo: reverse intervals
 	}
 }

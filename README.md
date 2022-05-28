@@ -1,2 +1,4 @@
-# time-interval-overlap-utils
- 
+- A simple utility library for finding the overlap between two time intervals.
+- Requires Java 1.8 or above. 
+- No dependency to other libraries.
+- 100% test coverage.

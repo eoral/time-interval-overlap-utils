@@ -1,15 +1,16 @@
 package com.eoral.timeintervaloverlaputils;
 
-import java.time.Duration;
 import java.time.Instant;
+import java.util.Objects;
 import java.util.Optional;
 
-public class TimeIntervalOverlapUtils {
+public final class TimeIntervalOverlapUtils {
+	
+	private TimeIntervalOverlapUtils() {}
 		
 	public static Optional<TimeInterval> getOverlap(TimeInterval interval1, TimeInterval interval2) {
-		if (interval1 == null || interval2 == null) {
-			throw new IllegalArgumentException("Intervals cannot be null.");
-		}
+		Objects.requireNonNull(interval1, "Intervals cannot be null.");
+		Objects.requireNonNull(interval2, "Intervals cannot be null.");
 		if (interval2.getStart().isAfter(interval1.getEnd()) || interval1.getStart().isAfter(interval2.getEnd())) {
 			return Optional.empty();
 		} else {
@@ -21,16 +22,6 @@ public class TimeIntervalOverlapUtils {
 				TimeInterval interval = new TimeInterval(maxStart, minEnd);
 				return Optional.of(interval);
 			}
-		}
-	}
-	
-	public static Duration getOverlapDuration(TimeInterval interval1, TimeInterval interval2) {
-		Optional<TimeInterval> optionalOverlap = getOverlap(interval1, interval2);
-		if (optionalOverlap.isPresent()) {
-			TimeInterval overlap = optionalOverlap.get();
-			return Duration.between(overlap.getStart(), overlap.getEnd());
-		} else {
-			return Duration.ZERO;
 		}
 	}
 }
